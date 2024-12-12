@@ -1,0 +1,25 @@
+{
+  "components": [
+    {
+      "label": "Response",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0gnu0sl",
+        "columns": null
+      },
+      "id": "Field_0j8oi1b",
+      "key": "text",
+      "readonly": true,
+      "disabled": true
+    }
+  ],
+  "type": "default",
+  "id": "frm_response",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.27.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.21.0",
+  "schemaVersion": 16
+}
