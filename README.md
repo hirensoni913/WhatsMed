@@ -23,7 +23,7 @@ The team consists of the following members:
 
 ## Background 🏞️
 Our aim was to model a clinical pathway and to improve work efficiency on time-intensive tasks, which overlap with different roles. We analyzed the patient process in the hospital, aiming to identify time-intensive key tasks and to simplify them by reducing the manual and user - i.e. physician-related - work tasks in the documentation process. 
-Most publications focus on improving existing processes in the EHR (Electronic health record), introduce CDS (Clinical decision support) or relate to outpatient treatment, but do not consider the cross-section between admission documents as paper or pdf and the lack of errors due to transcribing worng or only selected portions of the material, which is related to time-restraints and other causes. 
+Most publications focus on improving existing processes in the EHR (Electronic health record), introduce CDS (Clinical decision support) or relate to outpatient treatment, but do not consider the cross-section between admission documents as paper or pdf and the lack of errors due to transcribing wrong or only selected portions of the material, which is related to time-restraints and other causes. 
 
 We querried Google Scholar, Date Dec 14 2024, with the following search terms:
 
@@ -33,7 +33,7 @@ We querried Google Scholar, Date Dec 14 2024, with the following search terms:
 
 A few examples of the most important sources of medication interactions and related (critical) incidents help to understand the scope and the implications:
 - wrongly or not documented medication taken by the patient before or during admission
-- the change of doses due to wrong or multiple informations
+- the change of doses due to wrong or multiple information
 - prescription of medication that is contraindicated because of allergies, drug-drug interactions risk of Torsade de points or other reasons
 - physician's lack of time to review all available documents
 - erroneous prescription due to patients misinformation or obliviousness
