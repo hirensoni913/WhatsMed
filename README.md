@@ -58,14 +58,61 @@ The basic pools and lanes remain untouched, but we enriched the physician's subt
 
 ## Technical Background 🛠️
 
-### LLM Integration
+This project integrates the **Camunda Workflow Engine** with **ChatGPT** to automate the interpretation of OCR-extracted medication data. The workflow uses a Service Task to query the **WhatsMed API**, which connects to ChatGPT to process and analyze the extracted blister text data.
 
-### OCR with Tesseract or ChatGPT
+### Workflow Objective 🎯
 
+The primary objective of this workflow is to process OCR-extracted text from medication blisters provided through a form field in a **User Task**. If the checkbox in the User Task form (indicating manual confirmation) is left unchecked and the **blister_text** field contains data, the workflow proceeds to a Service Task named **Query WhatsMed API**.
 
-### Deliverables and Artefacts 📦
-- Link to a running workflow(s) and microservice instantiation(s):
- - Link to start form(s) and cloud-based deployment(s)
+This Service Task is designed to analyze the provided blister text and return a structured CSV output detailing the medication’s information and for storing it into a database. The analysis leverages ChatGPT to determine details like brand name, active ingredients, dosage, dosage form, and indication. This process automates the interpretation of blister text, reducing manual effort and ensuring consistency.
+
+---
+
+### How the Workflow Operates 🔄
+
+1. **User Task – Verify Complete Record**:
+   - A User Task form captures two key inputs:
+     - A checkbox `"is_verified"` indicating whether the information about the medications are complete.
+     - The **blister_text**, which contains OCR-extracted text from the medication blister.
+
+2. **Gateway Logic**:
+   - If the checkbox `"is_verified"` is **unchecked** and the **blister_text** field is populated, the workflow routes to the Service Task named **Query WhatsMed API**.
+   - If the checkbox is checked, the workflow bypasses the Service Task.
+
+3. **Service Task – Query WhatsMed API**:
+   - The Service Task triggers a Camunda external task with the topic `"generate_response"`.
+   - The worker fetches the task, retrieves the **blister_text** variable, and processes it using ChatGPT.
+
+---
+
+### Connection to WhatsMed API and ChatGPT 🌐
+
+#### WhatsMed API Workflow 🧩
+The worker acts as an external task processor for the `"generate_response"` topic. It:
+1. Fetches the task from Camunda, extracting the **blister_text** variable from the process.
+2. Constructs a prompt that combines a predefined template with the provided blister text.
+
+#### ChatGPT Integration 🧠
+The constructed prompt is sent to ChatGPT for processing. The prompt template is as follows:
+```plaintext
+Imagine you are a pharmacist assistant.
+
+I will provide you with a list of medications in an array. Please provide csv in text format where each row is a medication and the columns are: 
+
+Brand_Name : The brand name of each medication
+Substance: The active ingredient in the medications
+Dosage: The dose of the medication 
+Dosage_form: The dosage form the medication is in
+Indication: What indication the medicine is for
+
+For all columns except indication, if some of the information is not available, like for example if I do not define the dosage in my array, you should fill those spaces with NaN. For indication, the information will never be provided and will instead be filled by you. Use https://www.drugs.com as your data source.
+
+Do not provide any other information other than the csv in text format.
+
+It is possible that only part of the medication's name is provided. In this case, do not try to guess the name. Instead, insert Information not available- name unclear for all 5 columns of that row.
+```
+The blister_text from the Camunda process is appended directly to the end of the prompt.
+
 
 ## Conclusion ✨
 The Swiss Healthcare System suffers from the constant breaching of the main features of electronic health records by creating printouts and PDF files, which are not saved in a centralized database and partially lost due to fragmentation, culminating in physicians and other healthcare professionals constantly copying PDFs or printouts into the local EHR and painstakingly comparing multiple records of discharge documents to summarize important and essential information like the medication taken by the patient prescribed by multiple parties without being orchestrated sufficiently. Every practitioner and hospital uses their own and local HIS system and database, which is most of the time not accessible by other parties. The proposed solution for Switzerland - Electronic Patient Record (EPR) - is not used by most actors and till now an expensive dead end, due to the lack of adoption, but generally would have a lot of promise, if the adoption was more common.
